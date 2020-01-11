@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bw.miaoheng20200111.entity.ClsEntity;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,14 +38,23 @@ class ClsAdapter  extends RecyclerView.Adapter<ClsAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-       holder.orderListId.setText(list.get(position).getOrderId());
-       holder.orderSend.setText(list.get(position).getExpressCompName());
-        //String commodityPic = list.get(position).getDetailList().get(position).getCommodityPic();
-       // String[] split = commodityPic.split(",");
+       holder.orderListId.setText("订单编号:"+list.get(position).getOrderId());
+       holder.orderSend.setText("                       快递公司:"+list.get(position).getExpressCompName());
+       final List<ClsEntity.OrderListBean.DetailListBean> detailList = list.get(position).getDetailList();
+        String commodityPic = null;
+       if(detailList.size()>0){
+           for (int i = 0; i < detailList.size(); i++) {
+                commodityPic = detailList.get(i).getCommodityPic();
+               holder.tv_xinxi.setText(detailList.get(i).getCommodityName());
+               holder.tv_price.setText("￥"+detailList.get(i).getCommodityPrice());
+           }
+           String[] split = commodityPic.split(",");
+           Glide.with(context).load(split[0]).into(holder.imageView);
+       }
 
-       // Glide.with(context).load(split[0]).into(holder.imageView);
-        holder.tv_xinxi.setText(list.get(position).getDetailList().get(position).getCommodityName());
-        holder.tv_price.setText("￥"+list.get(position).getDetailList().get(position).getCommodityPrice());
+
+
+
     }
 
     @Override
